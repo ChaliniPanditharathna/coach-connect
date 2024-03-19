@@ -1,31 +1,28 @@
 <template>
-  <div class="client-home">
-    <div class="search-container">
-      <input type="text" v-model="searchKey" placeholder="Search..." />
-      <button @click="search">Search</button>
-    </div>
-
-    <table>
+  <div>
+    <h1>Instructors</h1>
+    <table  style="width: 80%;margin: 0 auto;">
       <thead>
         <tr>
-          <th>Id</th>
           <th>Name</th>
           <th>Email</th>
-          <th>City</th>
-          <th>Company</th>
-          <th>Job</th>
-          <th>Date</th>
+          <th>Qualification</th>
+          <th>Availability</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="instructor in filteredInstructors" :key="instructor.id">
-          <td>{{ instructor.id }}</td>
-          <td>{{ instructor.name }}</td>
+        <tr v-for="instructor in instructors" :key="instructor.id">
+          <td>{{ instructor.fName }} {{ instructor.lName }}</td>
           <td>{{ instructor.email }}</td>
-          <td>{{ instructor.city }}</td>
-          <td>{{ instructor.company }}</td>
-          <td>{{ instructor.job }}</td>
-          <td>{{ instructor.date }}</td>
+          <td>{{ instructor.qualification }}</td>
+          <td>
+            <ul v-if="instructor.availability.length > 0">
+              <li v-for="availability in instructor.availability" :key="availability.id">
+                {{ availability.weekDay }}: {{ availability.startTime }} - {{ availability.endTime }}
+              </li>
+            </ul>
+            <span v-else>No availability information</span>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -33,39 +30,47 @@
 </template>
 
 <script>
+// Assuming the instructors data is imported from your JSON file
+import instructorsData from './instructors.json';
+
 export default {
+  name: 'ClientHome',
   data() {
     return {
-      searchKey: '',
-      instructors: [
-        // Assuming this is the data structure you're working with
-        // Replace with actual data, possibly fetched from an API
-        { id: 16, name: 'Samara Kulb', email: 'benjamin.green@example.net', city: 'Port Coralie', company: 'Deckow Group', job: 'Typesetting Machine Operator', date: '2017-01-13 19:17:16' },
-        // ... other instructors
-      ],
+      instructors: []
     };
   },
-  computed: {
-    filteredInstructors() {
-      if (!this.searchKey) {
-        return this.instructors;
-      }
-      return this.instructors.filter((instructor) => {
-        return Object.values(instructor).some((value) =>
-          value.toString().toLowerCase().includes(this.searchKey.toLowerCase())
-        );
-      });
-    },
-  },
-  methods: {
-    search() {
-      // The search action will automatically trigger the computed property to update.
-      // This method could be used to fetch new data based on the searchKey.
-    },
-  },
+  created() {
+    // Assuming 'instructorsData' contains the JSON structure you provided
+    this.instructors = instructorsData.instructors;
+  }
 };
 </script>
 
 <style>
-/* Add your CSS here */
+/* Add this CSS to your component's style section or to your global CSS */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+/* Apply alternating row colors */
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
 </style>
