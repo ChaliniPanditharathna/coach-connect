@@ -39,7 +39,9 @@ export default {
                     this.$router.push({name:"login"});
 
                       localStorage.setItem("userRole", user.roles);
+                      localStorage.setItem("userid", user.id);
                  const userRole = localStorage.getItem("userRole");
+                 
 
                  if(userRole === "ROLE_INSTRUCTOR"){
                         this.$router.push('/instructorhome');

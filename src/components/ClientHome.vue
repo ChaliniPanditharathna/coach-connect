@@ -2,7 +2,7 @@
   <div class="instructors-page">
     <h1>Instructors</h1>
     <div class="search-container">
-      <input type="text" v-model="searchQuery" placeholder="Search by name or email" class="search-input">
+      <input type="text" v-model="searchQuery" placeholder="Search by city or expertise" class="search-input">
     </div>
     <table class="instructors-table">
       <thead>
@@ -14,6 +14,7 @@
           <th>Expertise</th>
           <th>Availability</th>
           <th>Gender</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -32,21 +33,50 @@
             <span v-else class="no-availability">No availability information</span>
           </td>
           <td>{{ instructor.gender }}</td>
+          <td>    <button @click="openModal(instructor)" class="book-button">Book Appointment</button>
+        
+         </td>
+   
+        
+        
         </tr>
       </tbody>
     </table>
+   
+  <!-- Modal for appointment booking -->
+  <div class="modal" v-if="isModalOpen">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Book Appointment</h4>
+            <button type="button" class="close" @click="closeModal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <appointment-book :instructor="selectedInstructor" :availability="selectedInstructor.availability" @close="closeModal" @book="bookAppointment"/>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
 </template>
 
 <script>
 import InstructorService from '@/services/InstructorService';
-
+import AppointmentBook from '@/components/AppointmentBook.vue';
 export default {
   name: 'ClientHome',
+  components: {
+    AppointmentBook
+  },
   data() {
     return {
       instructors: [],
-      searchQuery: ''
+      searchQuery: '',
+      isModalOpen: false,
+      selectedInstructor: null,
+      selectedTimeSlot: null,
+      timeSlots: []
     };
   },
   created() {
@@ -54,6 +84,7 @@ export default {
   },
   methods: {
     fetchInstructors() {
+    
       // Ensure that your service method accepts the search query parameter
       if (!this.searchQuery) {
         InstructorService.getData()
@@ -71,6 +102,7 @@ export default {
         InstructorService.getDataBySearch({ searchKey: this.searchQuery })
           .then(response => {
             if (response && response.data) {
+           
               this.instructors = response.data.instructors;
             } else {
               console.error("Invalid response format:", response);
@@ -81,6 +113,16 @@ export default {
           });
       }
     },
+    openModal(instructor) {
+      this.selectedInstructor = instructor;
+      this.isModalOpen = true;
+    },
+    closeModal() {
+      this.isModalOpen = false;
+    },
+    bookAppointment() {
+      this.isModalOpen = false;
+    }
   },
   computed: {
     filteredInstructors() {
@@ -121,7 +163,9 @@ export default {
   border: 1px solid #ddd;
   padding: 8px;
 }
-
+.book-button{
+  background-color: #04AA6D;
+}
 .instructors-table th {
   background-color: #f2f2f2;
 }
