@@ -51,6 +51,13 @@ const routes = [
         name: "adminhome",
         component: AdminHome
     }
+    ,
+    {
+        path: "/",
+        alias: "/instructor",
+        name: "instructor",
+        component: UserLogin
+    }
 ];
 
 const router = createRouter({
