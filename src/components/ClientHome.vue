@@ -33,7 +33,7 @@
             <span v-else class="no-availability">No availability information</span>
           </td>
           <td>{{ instructor.gender }}</td>
-          <td>    <button @click="openModal(instructor)" class="book-button">Book Appointment</button>
+          <td>   <button @click="openModal(instructor)" class="book-button" :disabled="instructor.appointmentBooked">Book Appointment</button>
         
          </td>
    
@@ -76,7 +76,8 @@ export default {
       isModalOpen: false,
       selectedInstructor: null,
       selectedTimeSlot: null,
-      timeSlots: []
+      timeSlots: [],
+      appointmentBooked:false
     };
   },
   created() {
@@ -121,7 +122,9 @@ export default {
       this.isModalOpen = false;
     },
     bookAppointment() {
+      this.selectedInstructor.appointmentBooked = true;
       this.isModalOpen = false;
+     
     }
   },
   computed: {
