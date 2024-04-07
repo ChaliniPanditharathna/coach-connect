@@ -2,7 +2,7 @@
   <div class="instructors-page">
     <h1>Instructors</h1>
     <div class="search-container">
-      <input type="text" v-model="searchQuery" placeholder="Search by city or expertise" class="search-input">
+      <input type="text" v-model="searchQuery" @input="fetchInstructors" placeholder="Search by city or expertise" class="search-input">
     </div>
     <table class="instructors-table">
       <thead>
@@ -18,7 +18,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="instructor in filteredInstructors" :key="instructor.id">
+        <tr v-for="instructor in instructors" :key="instructor.id">
           <td>{{ instructor.fName }} {{ instructor.lName }}</td>
           <td>{{ instructor.email }}</td>
           <td>{{ instructor.unitNo }} {{ instructor.street }}, {{ instructor.city }} {{ instructor.postalCode }}</td>
@@ -33,7 +33,7 @@
             <span v-else class="no-availability">No availability information</span>
           </td>
           <td>{{ instructor.gender }}</td>
-          <td>    <button @click="openModal(instructor)" class="book-button">Book Appointment</button>
+          <td>   <button @click="openModal(instructor)" class="book-button" :disabled="instructor.appointmentBooked">Book Appointment</button>
         
          </td>
    
@@ -76,7 +76,8 @@ export default {
       isModalOpen: false,
       selectedInstructor: null,
       selectedTimeSlot: null,
-      timeSlots: []
+      timeSlots: [],
+      appointmentBooked:false
     };
   },
   created() {
@@ -84,8 +85,6 @@ export default {
   },
   methods: {
     fetchInstructors() {
-    
-      // Ensure that your service method accepts the search query parameter
       if (!this.searchQuery) {
         InstructorService.getData()
           .then(response => {
@@ -99,10 +98,9 @@ export default {
             console.error("Error fetching instructors:", e);
           });
       } else {
-        InstructorService.getDataBySearch({ searchKey: this.searchQuery })
+        InstructorService.getDataBySearch( this.searchQuery  )
           .then(response => {
             if (response && response.data) {
-           
               this.instructors = response.data.instructors;
             } else {
               console.error("Invalid response format:", response);
@@ -121,14 +119,9 @@ export default {
       this.isModalOpen = false;
     },
     bookAppointment() {
+      this.selectedInstructor.appointmentBooked = true;
       this.isModalOpen = false;
-    }
-  },
-  computed: {
-    filteredInstructors() {
-      return this.instructors.filter(instructor => {
-        return instructor.city.toLowerCase().includes(this.searchQuery.toLowerCase()) || instructor.expertise.toLowerCase().includes(this.searchQuery.toLowerCase());
-      });
+     
     }
   }
 };

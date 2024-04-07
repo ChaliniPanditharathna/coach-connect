@@ -6,6 +6,8 @@ import UserRegistration from "../components/UserRegistration.vue";
 import InstructorHome from "../components/InstructorHome.vue";
 import ClientHome from "../components/ClientHome.vue";
 import AdminHome from "../components/AdminHome.vue";
+import AppointmentList from "../components/AppointmentList.vue";
+
 const routes = [
 
     {
@@ -57,6 +59,12 @@ const routes = [
         alias: "/instructor",
         name: "instructor",
         component: UserLogin
+    },
+    {
+        path: "/",
+        alias: "/appointment",
+        name: "appointment",
+        component: AppointmentList
     }
 ];
 
