@@ -57,9 +57,11 @@
       this.fetchAppointments();
     },
     methods: {
+  
       fetchAppointments() {
-        const instructorId = this.getInstructorId();
-        console.log('instructorId ' + instructorId);
+        const userid = localStorage.getItem("userid");
+        const instructorId = 1;
+        console.log('instructorId ' + userid);
         AppointmentService.fetchInstructorAppointments(instructorId) 
           .then(response => {
             this.appointments = response.data;
@@ -67,6 +69,7 @@
           .catch(error => {
             console.error('Error fetching appointments:', error);
           });
+          
       },
       approveAppointment(appointmentId) {
         AppointmentService.approveAppointment(appointmentId)

@@ -1,32 +1,73 @@
 <template>
   <nav class="navbar">
-    <a href="#home" class="nav-item">Home</a>
+    <a href="#home" v-if="!isLoggedIn" class="nav-item">Home</a>
+    <router-link  v-if="isLoggedIn && isLoggedClient " to="/clienthome" class="nav-item">Home</router-link>
+    <router-link  v-if="isLoggedIn && isLoggedInstructor " to="/instructorhome" class="nav-item">Home</router-link>
     <a href="#services" class="nav-item">My Profile</a>
-    <a href="#about" class="nav-item">Appointments</a>
-    <a href="#contact" class="nav-item">SignOut</a>
+    <router-link  v-if="isLoggedIn" to="/appointment" class="nav-item">Appointments</router-link>
+  
     <div class="auth-buttons">
-        <button @click="goToLogin">Login</button>
-        <!-- This is a comment in HTML 
-        <button @click="goToSignUp">SignUp</button>
-        -->
-        
-      </div>
+      <button @click="goToLogin" :disabled="isLoggedIn" >Login</button>
+      <!-- <button @click="goToSignUp">Sign Up</button> -->
+      <button @click="logout" >Logout</button>
+    </div>
   </nav>
 </template>
 
 <script>
+import LoginService from "../services/LoginService";
+
 export default {
   name: 'NavBar',
-  // Any additional logic or data for your navbar can go here
+  
+  data() {
+    return {
+      isLoggedIn: false ,
+      isLoggedInstructor:false,
+      isLoggedClient:false,
+    };
+  },  
+  created() {
+    this.isLoggedIn = localStorage.getItem('isLoggedIn'); 
+    if( localStorage.getItem("userRole") == "ROLE_INSTRUCTOR"){
+        this.isLoggedInstructor= true;
+      }
+      if( localStorage.getItem("userRole") == "ROLE_CLIENT"){
+        console.log("Ima here")
+        this.isLoggedClient= true;
+      }
+  },
+
   methods: {
     goToLogin() {
-      // Define navigation to the login page
-       this.$router.push('/login');
+      this.$router.push('/login').then(() => {
+      this.isLoggedIn= localStorage.getItem("isLoggedIn");
+      if( localStorage.getItem("userRole") == "ROLE_INSTRUCTOR"){
+        this.isLoggedInstructor= true;
+      }
+      if( localStorage.getItem("userRole") == "ROLE_CLIENT"){
+        console.log("Ima here")
+        this.isLoggedClient= true;
+      }
+    });
     },
+    logout() {
+            LoginService.logout()
+                .then(response => {       
+                    var user = response.data;
+                 alert(user.message);
+                 this.isLoggedIn = false; 
+              this.$router.push('/');
+                })
+                .catch(e => {
+                    console.log(e.response.data);
+                });
+        },
     goToSignUp() {
       // Define navigation to the sign-up page
       // this.$router.push('/signup');
     },
+    
   }
 };
 </script>
@@ -58,8 +99,12 @@ export default {
     text-align: left;
   }
 }
-.auth-buttons button {
-  margin-left: 10px;
+
+.auth-buttons {
+  float: right; /* Align button container to the right */
+}
+
+button {
   margin-top: 10px;
   padding: 8px 15px;
   border: 2px solid #fff; /* White border for the buttons */
@@ -70,7 +115,7 @@ export default {
   transition: all 0.2s ease-in-out;
 }
 
-.auth-buttons button:hover {
+button:hover {
   background-color: #fff;
   color: #000;
 }

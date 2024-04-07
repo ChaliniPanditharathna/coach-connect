@@ -1,20 +1,20 @@
 <template>
     <!-- define the layout -->
-    <div>
+    <div class="login-container">
         <h4>Login</h4>
         <form>
-            <div>
+            <div class="form-group">
                 <label for="username">UserName</label>
                 <input type="text" id="username" v-model="userLoginRequest.username" />
             </div>
-            <div>
+            <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" v-model="userLoginRequest.password" />
             </div>
         </form>
 
-        <button type="submit" @click="login">Login</button>
-        <button type="submit" @click="signUp">Sign Up</button>
+        <button @click="login">Login</button>
+        <button @click="signUp">Sign Up</button>
         <p>{{ message }}</p>
     </div>
 </template>
@@ -35,14 +35,15 @@ export default {
             LoginService.login(this.userLoginRequest)
                 .then(response => {       // HttpStatus.OK
                     var user = response.data;
-                    console.log(user);
                     this.$router.push({name:"login"});
 
                       localStorage.setItem("userRole", user.roles);
+                      localStorage.setItem('isLoggedIn', true);
                       localStorage.setItem("userid", user.id);
+                      localStorage.setItem("isDone", true);
                  const userRole = localStorage.getItem("userRole");
                  
-
+             
                  if(userRole === "ROLE_INSTRUCTOR"){
                         this.$router.push('/instructorhome');
                  }else if(userRole === "ROLE_CLIENT"){
@@ -58,6 +59,7 @@ export default {
                     this.message = e.response.data.message;
                     console.log(e.response.data);
                 });
+                this.$emit('loggedIn');
         },
         signUp() {
       // Logic when 'I am a Client' is clicked
@@ -71,9 +73,57 @@ export default {
 };
 </script>
 
-<style>
-.edit-form {
+
+<style scoped>
+.login-container {
     max-width: 300px;
     margin: auto;
+    margin-top: 50px;
+    padding: 50px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.login-container h4 {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+    font-size: 16px;
+    padding-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
 </style>

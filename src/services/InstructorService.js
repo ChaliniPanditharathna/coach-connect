@@ -2,9 +2,9 @@ import http from "../http-common.js";
 
 class InstructorService {
     getDataBySearch(searchKey) {
-        const params = new URLSearchParams();
-        params.append('searchKey', searchKey);
-        return http.get("/instructor",{ params });
+     
+        console.log('searchKey', searchKey);
+        return http.get(`/instructor?searchKey=${searchKey}`);
     }
     getData() {
         return http.get("/instructor");
