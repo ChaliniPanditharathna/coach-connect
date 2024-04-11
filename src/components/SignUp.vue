@@ -14,16 +14,12 @@
 <script>
 export default {
   name: 'HomePage',
-  methods: {
+    methods: {
     clientSelected() {
-      // Logic when 'I am a Client' is clicked
-      // For example, navigate to client-specific page:
-       this.$router.push('/register');
+      this.$router.push({ path: '/register', query: { role: 'client' } });
     },
     instructorSelected() {
-      // Logic when 'I am an Instructor' is clicked
-      // For example, navigate to instructor-specific page:
-     this.$router.push('/register');
+      this.$router.push({ path: '/register', query: { role: 'instructor' } });
     }
   }
 };

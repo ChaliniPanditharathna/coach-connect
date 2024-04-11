@@ -3,7 +3,8 @@
     <a href="#home" v-if="!isLoggedIn" class="nav-item">Home</a>
     <router-link  v-if="isLoggedIn && isLoggedClient " to="/clienthome" class="nav-item">Home</router-link>
     <router-link  v-if="isLoggedIn && isLoggedInstructor " to="/instructorhome" class="nav-item">Home</router-link>
-    <a href="#services" class="nav-item">My Profile</a>
+    <router-link to="/profile" class="nav-item">My Profile</router-link>
+    <!--<a href="#profile" class="nav-item">My Profile</a>-->
     <router-link  v-if="isLoggedIn" to="/appointment" class="nav-item">Appointments</router-link>
   
     <div class="auth-buttons">
