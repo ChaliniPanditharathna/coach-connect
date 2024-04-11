@@ -36,9 +36,15 @@ class AppointmentService {
     return http.put('/appointment/reject', payload);
   }
 
+  //Reshedule Appointments
+  rescheduleAppointment(appointmentId, newDate) {
+    return http.put('/appointment/reschedule', {
+        "appointmentId": appointmentId,
+        "newDate": newDate
+    });
+  }
 
-
-
+  
 }
 
 export default new AppointmentService();

@@ -1,7 +1,8 @@
 <template>
+  
     <div class="instructors-page">
       <h4>Instructor Home</h4>
-      <table>
+      <table class="instructors-table">
         <thead>
           <tr>
             <th>Appointment ID</th>
@@ -15,12 +16,18 @@
           <tr v-for="appointment in appointments" :key="appointment.id">
             <td>{{ appointment.id }}</td>
             <td>{{ appointment.date }}</td>
-            <td>{{ appointment.status }}</td>
+            <td>
+              {{ appointment.status === 'STATUS_PENDING' ? 'Pending' : 
+                (appointment.status === 'STATUS_APPROVED' ? 'Approved' : 
+                (appointment.status === 'STATUS_REJECTED' ? 'Rejected' : 
+                appointment.status)) }}
+            </td>
             <td>{{ appointment.rejectedReason }}</td>
             <td>
               <!-- This button now only allows approving if status is STATUS_PENDING -->
               <button @click="approveAppointment(appointment.id)" v-if="appointment.status === 'STATUS_PENDING'" class="action-button approve-button">Approve</button>
               <button @click="rejectAppointment(appointment.id)" v-if="appointment.status === 'STATUS_PENDING'" class="action-button reject-button">Reject</button>
+              <button @click="openRescheduleModal(appointment.id)" v-if="appointment.status === 'STATUS_PENDING'" class="action-button">Reschedule</button>
             </td>
             
           </tr>
@@ -37,6 +44,18 @@
         </div>
       </div>
 
+            <!-- Reschedule Appointment Modal -->
+      <div v-show="showRescheduleModal" class="modal">
+        <div class="modal-content">
+          <span class="close" @click="closeRescheduleModal">&times;</span>
+          <h2>Select new date</h2>
+          <input type="date" v-model="newRescheduleDate" placeholder="Enter new date..." class="date-input"/>
+          <button @click="submitReschedule" class="action-button">Submit</button>
+        </div>
+      </div>
+
+   
+
       
     </div>
   </template>
@@ -50,7 +69,9 @@
         appointments: [],
         showRejectReasonModal: false,
         selectedAppointmentId: null,
-        rejectReason: ''
+        rejectReason: '',
+        showRescheduleModal: false,
+        newRescheduleDate: '',
       };
     },
     created() {
@@ -107,7 +128,36 @@
       },
       getInstructorId() {
         return localStorage.getItem('instructorId');
-      }
+      },
+
+
+    openRescheduleModal(appointmentId) {
+    this.selectedAppointmentId = appointmentId;
+    this.showRescheduleModal = true; // This will show the rescheduling modal
+    this.newRescheduleDate = ''; 
+  },
+
+  closeRescheduleModal() {
+    this.showRescheduleModal = false;
+  },
+
+  submitReschedule() {
+    if (!this.newRescheduleDate) {
+      alert('Please select a new date for the appointment.');
+      return;
+    }
+    AppointmentService.rescheduleAppointment(this.selectedAppointmentId, this.newRescheduleDate)
+      .then(() => {
+        console.log('Appointment rescheduled');
+        this.closeRescheduleModal();
+        this.fetchAppointments(); // Refresh the list to reflect the new date
+      })
+      .catch(error => {
+        console.error('Error rescheduling appointment:', error);
+        alert('Error rescheduling appointment');
+      });
+  },
+
     }
   };
   </script>
@@ -189,6 +239,23 @@
     height: 100px;
     margin-bottom: 10px;
   }
+  .instructors-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modal-dialog {
+  /* This centers the modal vertically */
+  display: flex;
+  align-items: center;
+}
+
+.date-input {
+  padding: 5px;
+  margin: 10px 0;
+  width: calc(25% - 10px);
+  box-sizing: border-box;
+}
   
   </style>
   
