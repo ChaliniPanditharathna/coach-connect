@@ -16,8 +16,10 @@
             </select>
             <i class="fas fa-chevron-down"></i>
           </div>
-          <p>Please select a date:</p>
+          <div class="date-select">
+            <p>Please select a date:</p>
           <input type="date" v-model="selectedDate" class="form-control">
+          </div>
         </div>
       
         <div class="modal-footer">
@@ -180,7 +182,18 @@ export default {
 .time-slot-dropdown {
   position: relative;
 }
-
+.date-select input{
+  position: relative;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 10px;
+  width: 40%;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  appearance: none;
+  background-color: transparent;
+  padding: 8px 28px ;
+}
 .time-slot-dropdown select {
   appearance: none;
   -webkit-appearance: none;
