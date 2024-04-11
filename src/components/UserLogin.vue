@@ -36,6 +36,9 @@ export default {
                 .then(response => {       // HttpStatus.OK
                     var user = response.data;
                     this.$router.push({name:"login"});
+                      localStorage.setItem("username", user.username); 
+                      localStorage.setItem("email", user.email); 
+
 
                       localStorage.setItem("userRole", user.roles);
                       localStorage.setItem('isLoggedIn', true);

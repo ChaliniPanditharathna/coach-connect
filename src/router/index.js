@@ -2,10 +2,12 @@ import { createWebHistory, createRouter } from "vue-router";
 import UserLogin from "../components/UserLogin.vue";
 import SignUp from "../components/SignUp.vue";
 import HomePage from "../components/HomePage.vue";
-import UserRegistration from "../components/UserRegistration.vue";
 import InstructorHome from "../components/InstructorHome.vue";
 import ClientHome from "../components/ClientHome.vue";
 import AdminHome from "../components/AdminHome.vue";
+import UserRegistration from "../components/UserRegistration.vue";
+import UserProfile from "@/components/UserProfile.vue";
+import UpdateProfile from "@/components/UpdateProfile";
 import AppointmentList from "../components/AppointmentList.vue";
 
 const routes = [
@@ -54,6 +56,18 @@ const routes = [
         component: AdminHome
     }
     ,
+    {
+        path: "/",
+        alias: "/profile",
+        name: "profile",
+        component: UserProfile
+      },
+      {
+        path: "/",
+        alias: "/update-profile",
+        name: "UpdateProfile",
+        component: UpdateProfile,
+      },
     {
         path: "/",
         alias: "/instructor",
