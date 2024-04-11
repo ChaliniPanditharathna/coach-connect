@@ -16,7 +16,10 @@
             </select>
             <i class="fas fa-chevron-down"></i>
           </div>
+          <p>Please select a date:</p>
+          <input type="date" v-model="selectedDate" class="form-control">
         </div>
+      
         <div class="modal-footer">
           <button @click="bookAppointment" class="book-button">Book</button>
         </div>
@@ -44,6 +47,7 @@ export default {
     return {
       selectedTimeSlot: null,
       clientId: null,
+      selectedDate: null,
     };
   },
   methods: {
@@ -63,13 +67,13 @@ export default {
       });
     },
     async bookAppointment() {
-      const currentDate = new Date();
-      // Format the date as needed, for example: YYYY-MM-DD
-      const formattedDate = currentDate.toISOString().slice(0, 10);
-      this.currentDate = formattedDate;
+      const appointmentDate = new Date(this.selectedDate);
+      const formattedDate = appointmentDate.toISOString().slice(0, 10);
+
+
       const appointmentData = {
         status: "STATUS_PENDING",
-        date: currentDate, // Assuming availability object contains date
+        date: formattedDate, // Assuming availability object contains date
         instructor: {
           id: this.instructor.id
         },
