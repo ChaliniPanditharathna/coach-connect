@@ -92,9 +92,14 @@ export default {
   },
   created() {
     this.fetchInstructors();
+   
   },
   methods: {
-    
+    setReloadTimeout(time) {
+      setTimeout(() => {
+        window.location.reload();
+      }, time);
+    },
     fetchInstructors() {
       if (!this.searchQuery) {
         InstructorService.getData()
@@ -162,15 +167,15 @@ export default {
       if (updatedInstructor) {
         updatedInstructor.rating = response.data.rating;
         updatedInstructor.clickedRating = rating;
-        alert("Sucessfully rated this instructor ");
       }
      
+      this.setReloadTimeout(60*5)
     
     })
     .catch(error => {
       console.error("Error submitting rating:", error);
     });
-    window.location.reload();
+    
 },
 displayRating(rating) {
   if (rating && rating.length > 0) {
@@ -181,7 +186,7 @@ displayRating(rating) {
         const averageRating = sum / rating.length;
         return '★'.repeat(averageRating) + '☆'.repeat(5 - averageRating);
       } else {
-        return 'No ratings yet';
+        return '☆'.repeat(5);
       }
     }
   },mounted() {
