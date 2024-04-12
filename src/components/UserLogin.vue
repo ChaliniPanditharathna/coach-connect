@@ -26,6 +26,7 @@
   <script>
   import LoginService from "../services/LoginService";
   import InstructorService from "@/services/InstructorService";
+  import ClientService from '@/services/ClientService';
   export default {
     name: "userLogin",
     data() {
@@ -51,39 +52,52 @@
             localStorage.setItem("userid", user.id);
             localStorage.setItem("isDone", true);
             const userRole = localStorage.getItem("userRole");
-  
-            InstructorService.getData()
-              .then((response) => {
-                if (response && response.data) {
-                  this.message = response.data.message;
-                  if (this.message === "No instructors.") {
-                    this.$router.push("/profile");
-                  } else {
-                    console.log("appoo", response.data.message);
-                    this.instructors = response.data;
-                    const foundInstructor = this.instructors.instructors.find(
-                      (instructor) =>
-                        instructor.userId == localStorage.getItem("userid")
-                    );
-                    if (foundInstructor) {
-                      if (userRole === "ROLE_INSTRUCTOR") {
-                        this.$router.push("/instructorhome");
-                      } else if (userRole === "ROLE_CLIENT") {
-                        this.$router.push("/clienthome");
-                      } else if (userRole === "ROLE_ADMIN") {
-                        this.$router.push("/adminhome");
-                      }
+            if (userRole === "ROLE_INSTRUCTOR") {
+              InstructorService.getData()
+                .then((response) => {
+                  if (response && response.data) {
+                    this.message = response.data.message;
+                    if (this.message === "No instructors.") {
+                      this.$router.push("/profile");
                     } else {
+                      this.instructors = response.data;
+                      const foundInstructor = this.instructors.instructors.find(
+                        (instructor) =>
+                          instructor.userId == localStorage.getItem("userid")
+                      );
+                      if (foundInstructor) {
+                        this.$router.push("/instructorhome");
+                      } else {
+                        this.$router.push("/profile");
+                      }
+                    }
+                  } else {
+                    console.error("Invalid response format:", response);
+                  }
+                })
+                .catch((e) => {
+                  console.error("Error fetching instructors:", e);
+                });
+            }
+            if (userRole === "ROLE_CLIENT") {
+              const userId = localStorage.getItem("userid");
+              ClientService.getClientData(userId)
+                .then((response) => {
+                  if (response && response.data) {
+                   const clientId = response.data.id;
+                    if(clientId !==null ){
+                      this.$router.push("/clienthome")
+                    }else {
                       this.$router.push("/profile");
                     }
+                  } else {
+                    this.$router.push("/profile");
                   }
-                } else {
-                  console.error("Invalid response format:", response);
-                }
-              })
-              .catch((e) => {
-                console.error("Error fetching instructors:", e);
-              });
+                })
+                .catch((e) => {
+                  console.error("Error fetching client:", e);
+                });
+            }
           })
           .catch((e) => {
             this.userLoginRequest.username = "";
@@ -158,4 +172,5 @@
   button:hover {
     background-color: #0056b3;
   }
-  </style>  
+  </style>
+  

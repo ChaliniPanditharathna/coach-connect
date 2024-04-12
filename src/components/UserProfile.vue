@@ -1,6 +1,7 @@
 <template>
     <div>
         <h1>Welcome, {{ username }}!</h1>
+        <div v-if="isLoggedInInstructor" style="display: block;">{{ displayRating(rating) }}</div>
     </div>
       <!-- Display user details if available -->
       <div v-if="userDetails">
@@ -35,11 +36,25 @@
         username: "",
         email: "",
         userDetails: null,
-        userRole: ""
+        userRole: "",
+        isLoggedInInstructor:false,
       };
     },
 
     methods: {
+      displayRating(rating) {
+      if (rating && rating.length > 0) {
+            let sum = 0;
+            for (let i = 0; i < rating.length; i++) {
+              sum += rating[i].value;
+            }
+            const averageRating = sum / rating.length;
+            return '★'.repeat(averageRating) + '☆'.repeat(5 - averageRating);
+          } else {
+            return '☆'.repeat(5);
+          }
+      },
+
       redirectToUpdateProfile() {
         console.log("Redirecting to update profile...");
         localStorage.setItem("email",this.email);
@@ -57,6 +72,7 @@
           fetchUserDetails(userId, userRole) {
           let userDetailsPromise;
           if (userRole === "ROLE_INSTRUCTOR") {
+            this.isLoggedInInstructor = true;
             userDetailsPromise = ProfileService.getInstructorDetails(userId);
           } else if (userRole === "ROLE_CLIENT") {
             userDetailsPromise = ProfileService.getClientDetails(userId);
@@ -66,6 +82,7 @@
         .then(response => {
           console.log("User details here!!!", response.data);
           this.userDetails = response.data; // Set userDetails to the fetched data
+          this.rating = response.data.rating;
         })
         .catch(error => {
           console.error("Error fetching user details:", error);
@@ -105,37 +122,26 @@
     background-color: #f9f9f9;
   }
   
-  .profile-form {
+  .user-details {
     margin-top: 20px;
   }
   
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .form-control {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  .user-details p {
+    margin-bottom: 10px;
   }
   
   .btn {
+    margin-top: 20px;
     padding: 8px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     background-color: #007bff;
     color: #fff;
+    transition: background-color 0.3s ease;
   }
   
-  .btn-primary:hover {
+  .btn:hover {
     background-color: #0056b3;
   }
   </style>
-  
