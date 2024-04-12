@@ -7,8 +7,9 @@ import ClientHome from "../components/ClientHome.vue";
 import AdminHome from "../components/AdminHome.vue";
 import UserRegistration from "../components/UserRegistration.vue";
 import UserProfile from "@/components/UserProfile.vue";
-import UpdateProfile from "@/components/UpdateProfile";
+import ClientProfileUpdate from "@/components/ClientProfileUpdate.vue";
 import AppointmentList from "../components/AppointmentList.vue";
+import InstructorProfileUpdate from "@/components/InstructorProfileUpdate.vue";
 
 const routes = [
 
@@ -63,11 +64,15 @@ const routes = [
         component: UserProfile
       },
       {
-        path: "/",
-        alias: "/update-profile",
-        name: "UpdateProfile",
-        component: UpdateProfile,
+        path: "/update-profile-client",
+        name: "UpdateProfileClient",
+        component: ClientProfileUpdate,
       },
+      {
+        path: "/update-profile-instructor",
+        name: "UpdateProfileInstructor",
+        component: InstructorProfileUpdate,
+      },      
     {
         path: "/",
         alias: "/instructor",
