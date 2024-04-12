@@ -104,6 +104,9 @@ export default {
       instructorAvailabilities: [{ weekDay: "", startTime: "", endTime: "" }]
     };
   },
+  create(){
+  localStorage.setItem("isLoggedIn", true);
+},
   methods: {
     addAvailability() {
       this.instructorAvailabilities.push({ weekDay: "", startTime: "", endTime: "" });
@@ -199,6 +202,11 @@ h4 {
 .form-group select,
 .form-group textarea {
   flex: 2;
+  padding: 6px; 
+}
+
+.form-group textarea {
+  height: 100px; /* Adjust the height as needed */
 }
 /* Styles for availability section */
 .availability-section {
