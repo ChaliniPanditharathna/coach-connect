@@ -123,7 +123,7 @@
   
   <style scoped>
   .login-container {
-    max-width: 300px;
+    max-width: 400px;
     margin: auto;
     margin-top: 50px;
     padding: 50px;

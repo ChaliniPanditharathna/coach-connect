@@ -167,6 +167,7 @@ export default {
 .profile-container {
   max-width: 600px;
   margin: auto;
+  margin-top: 50px;
   padding: 30px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -195,8 +196,8 @@ export default {
 .detail-item label {
   flex-shrink: 0;
   width: 150px; /* Adjust width as needed */
-  text-align: right;
-  margin-right: 20px;
+  text-align: left; /* Align labels to the left */
+  margin-left: 20px;
   font-weight: bold; /* Make labels bold */
 }
 
