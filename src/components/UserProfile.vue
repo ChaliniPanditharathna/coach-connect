@@ -113,35 +113,39 @@
   </script>
   
   <style scoped>
-  .profile-container {
-    max-width: 500px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-  }
-  
-  .user-details {
-    margin-top: 20px;
-  }
-  
-  .user-details p {
-    margin-bottom: 10px;
-  }
-  
-  .btn {
-    margin-top: 20px;
-    padding: 8px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: #fff;
-    transition: background-color 0.3s ease;
-  }
-  
-  .btn:hover {
-    background-color: #0056b3;
-  }
+ .profile-container {
+  max-width: 600px;
+  margin: 50px auto; /* Added margin */
+  padding: 30px;
+  border: 2px solid #4CAF50;
+  border-radius: 10px;
+  background-color: #f0f0f0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-details {
+  margin-top: 30px;
+}
+
+.user-details p {
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.btn {
+  margin-top: 30px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  background-color: #1500ff;
+  color: #fff;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #00e1f5;
+}
+
   </style>
