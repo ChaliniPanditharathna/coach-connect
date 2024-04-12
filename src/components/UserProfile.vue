@@ -42,6 +42,7 @@
     methods: {
       redirectToUpdateProfile() {
         console.log("Redirecting to update profile...");
+        localStorage.setItem("email",this.email);
         if (this.userRole === "ROLE_INSTRUCTOR") {
           console.log("Redirecting to InstructorProfileUpdate");
           this.$router.push({ name: "UpdateProfileInstructor" });

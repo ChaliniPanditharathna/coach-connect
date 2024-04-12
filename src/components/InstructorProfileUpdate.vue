@@ -111,6 +111,7 @@ export default {
       const profileUpdateRequest = {
         fName: this.fName,
         lName: this.lName,
+        email : localStorage.getItem("email"),
         gender: this.gender,
         unitNo: this.unitNo,
         street: this.street,
