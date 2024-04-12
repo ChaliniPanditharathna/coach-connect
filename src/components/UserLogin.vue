@@ -99,6 +99,9 @@
                   console.error("Error fetching client:", e);
                 });
             }
+            if (userRole === "ROLE_ADMIN") {
+              this.$router.push("/adminhome");
+            }
           })
           .catch((e) => {
             this.userLoginRequest.username = "";

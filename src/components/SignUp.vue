@@ -51,7 +51,7 @@ button {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  background-color: transparent;
+  background-color: #1565C0;
 }
 
 button::before {
