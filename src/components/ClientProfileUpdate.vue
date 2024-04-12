@@ -58,7 +58,7 @@
   import ProfileService from "../services/ProfileService";
   
   export default {
-    name: "UpdateProfile",
+    name: "ClientProfileUpdate",
     data() {
       return {
         profileUpdateRequest: {
