@@ -104,7 +104,7 @@
     const userId = localStorage.getItem("userid");
     ProfileService.getClientDetails(userId)
       .then(response => {
-        const clientDetails = response.data; // Assuming the response contains client details
+        const clientDetails = response.data;
         this.profileUpdateRequest = { ...this.profileUpdateRequest, ...clientDetails };
       })
       .catch(error => {
