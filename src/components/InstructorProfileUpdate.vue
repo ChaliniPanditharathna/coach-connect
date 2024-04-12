@@ -55,33 +55,30 @@
           class="form-control"
         ></textarea>
       </div>
+      <!-- New instructor availability fields -->
+      <div class="availability-section">
+  <!-- New instructor availability fields -->
+  <div v-for="(availability, index) in instructorAvailabilities" :key="index">
+    <div class="availability-group">
+      <h5 class="availability-heading">Availability {{ index + 1 }}</h5>
       <div class="form-group">
         <label for="weekDay">Week Day</label>
-        <input
-          type="text"
-          id="weekDay"
-          v-model="weekDay"
-          class="form-control"
-        />
+        <input type="text" v-model="availability.weekDay" class="form-control" />
       </div>
       <div class="form-group">
         <label for="startTime">Start Time</label>
-        <input
-          type="time"
-          id="startTime"
-          v-model="startTime"
-          class="form-control"
-        />
+        <input type="time" v-model="availability.startTime" class="form-control" />
       </div>
       <div class="form-group">
         <label for="endTime">End Time</label>
-        <input
-          type="time"
-          id="endTime"
-          v-model="endTime"
-          class="form-control"
-        />
+        <input type="time" v-model="availability.endTime" class="form-control" />
       </div>
+    </div>
+  </div>
+</div>
+
+      <button type="button" @click="addAvailability" class="btn btn-secondary">Add Availability</button>
+
 
       <button type="submit" class="btn btn-primary">Update Profile</button>
     </form>
@@ -104,10 +101,20 @@ export default {
     return {
       successMessage: "",
       errorMessage: "",
+      instructorAvailabilities: [{ weekDay: "", startTime: "", endTime: "" }]
     };
   },
   methods: {
+    addAvailability() {
+      this.instructorAvailabilities.push({ weekDay: "", startTime: "", endTime: "" });
+    },
+
+  
     updateProfile() {
+      this.instructorAvailabilities.forEach((availability) => {
+    availability.startTime += ":00";
+    availability.endTime += ":00";
+  });
       const profileUpdateRequest = {
         fName: this.fName,
         lName: this.lName,
@@ -119,12 +126,7 @@ export default {
         birthDate: this.birthDate,
         postalCode: this.postalCode,
         description: this.description,
-        instructorAvailability: {
-          // Add instructorAvailability object with default values
-          weekDay: this.weekDay,
-          startTime: this.startTime + ":00",
-          endTime: this.endTime + ":00",
-        },
+        instructorAvailability: this.instructorAvailabilities,
       };
       const id = localStorage.getItem("userid");
       console.log("Print log33", profileUpdateRequest);
@@ -160,46 +162,75 @@ export default {
 };
 </script>
 
+
+
 <style scoped>
+/* Styles for the form container */
 .update-profile-container {
-  max-width: 500px;
-  margin: auto;
+  max-width: 700px;
+  margin: 50px auto;
   padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #f7f7f7;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.update-profile-form {
-  margin-top: 20px;
-}
-
-.form-group {
+/* Styles for form headings */
+h4 {
   margin-bottom: 20px;
 }
 
-.label {
-  display: block;
-  margin-bottom: 5px;
+/* Styles for form fields */
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.form-control {
-  width: 100%;
+.form-group label {
+  flex: 1;
+  margin-right: 10px; /* Adjust margin as needed */
+  text-align: left; /* Align label text to the left */
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  flex: 2;
+}
+/* Styles for availability section */
+.availability-section {
+  border-top: 1px solid #ccc; /* Add a border at the top */
+  padding-top: 20px; /* Add some padding at the top */
+}
+
+/* Styles for availability group */
+.availability-group {
+  margin-bottom: 20px;
+}
+
+/* Styles for availability heading */
+.availability-heading {
+  margin-bottom: 10px;
+}
+
+/* Styles for success message */
+.success-message,
+.error-message {
+  margin-top: 20px;
   padding: 10px;
-  border: 1px solid #ccc;
   border-radius: 5px;
 }
-
-.btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #007bff;
-  color: #fff;
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+}
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
 }
 
-.btn-primary:hover {
-  background-color: #0056b3;
-}
+
 </style>
