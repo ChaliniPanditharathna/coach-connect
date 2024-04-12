@@ -62,6 +62,7 @@
   
   <script>
   import AppointmentService from '@/services/AppointmentService';
+  import InstructorService from '@/services/InstructorService';
   
   export default {
     data() {
@@ -72,17 +73,32 @@
         rejectReason: '',
         showRescheduleModal: false,
         newRescheduleDate: '',
+        instructorInfo: {},
       };
     },
     created() {
+      this.fetchInstructorData();
       this.fetchAppointments();
     },
     methods: {
+      async fetchInstructorData() {
+            const instructorId = this.getInstructorId();
+            if (!instructorId) {
+              console.error("Instructor ID not found.");
+              return;
+            }
+            try {
+              const response = await InstructorService.getInstructorData(instructorId);
+              this.instructorInfo = response.data;
+              console.log("Fetched Instructor Data:", this.instructorInfo);
+            } catch (error) {
+              console.error("Error fetching instructor data:", error);
+            }
+       },
   
       fetchAppointments() {
-        const userid = localStorage.getItem("userid");
-        const instructorId = 1;
-        console.log('instructorId ' + userid);
+        const instructorId = this.getInstructorId();
+        console.log('instructorId ' + instructorId);
         AppointmentService.fetchInstructorAppointments(instructorId) 
           .then(response => {
             this.appointments = response.data;
@@ -92,6 +108,7 @@
           });
           
       },
+
       approveAppointment(appointmentId) {
         AppointmentService.approveAppointment(appointmentId)
           .then(() => {
@@ -126,9 +143,6 @@
             alert('Error rejecting appointment');
           });
       },
-      getInstructorId() {
-        return localStorage.getItem('instructorId');
-      },
 
 
     openRescheduleModal(appointmentId) {
@@ -156,7 +170,10 @@
         console.error('Error rescheduling appointment:', error);
         alert('Error rescheduling appointment');
       });
-  },
+      },
+      getInstructorId() {
+         return localStorage.getItem('instructorId');
+      },
 
     }
   };

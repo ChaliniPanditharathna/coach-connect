@@ -9,6 +9,9 @@ class InstructorService {
     getData() {
         return http.get("/instructor");
     }
+    getInstructorData(userId) {
+        return http.get(`/instructor/${userId}` );
+    }
 
 }
 
