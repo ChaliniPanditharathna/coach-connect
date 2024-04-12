@@ -81,6 +81,9 @@ export default {
 <style scoped>
 .toggle-container {
   margin-bottom: 20px;
+  width: 95%;
+  margin: 0 auto;
+  
 }
 
 .toggle-label {
@@ -102,7 +105,8 @@ export default {
 }
 
 .appointments-table {
-  width: 100%;
+  width: 95%;
+  margin: 0 auto;
   border-collapse: collapse;
   margin-top: 20px;
 }

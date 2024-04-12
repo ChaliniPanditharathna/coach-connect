@@ -1,6 +1,6 @@
 <template>
   <div class="instructors-page">
-    <h1>Instructors</h1>
+    <h1>Instructors List</h1>
     <div class="search-container">
       <input type="text" v-model="searchQuery" @input="fetchInstructors" placeholder="Search by city or expertise" class="search-input">
     </div>
@@ -198,16 +198,17 @@ displayRating(rating) {
 <style scoped>
 /* Add this CSS to your component's style section or to your global CSS */
 .instructors-page {
-  max-width: 1200px;
+  width: 95%;
   margin: 0 auto;
 }
 
 .search-container {
   margin-bottom: 20px;
+  width: 100%; 
 }
 
 .search-input {
-  width: 100%;
+  width: calc(100% - 22px); 
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
