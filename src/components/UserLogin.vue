@@ -66,6 +66,7 @@
                           instructor.userId == localStorage.getItem("userid")
                       );
                       if (foundInstructor) {
+                        localStorage.setItem("instructorId", foundInstructor.id);
                         this.$router.push("/instructorhome");
                       } else {
                         this.$router.push("/profile");
