@@ -64,6 +64,7 @@
         profileUpdateRequest: {
           fName: "",
           lName: "",
+          email : localStorage.getItem("email"),
           birthDate: "",
           gender: "",
           unitNo: "",
@@ -83,7 +84,9 @@
           .then(response => {
             console.log(response.data);
             this.successMessage = "Updated Successfully";
-            this.clearForm(); 
+            alert("Sucessfully update the records");
+            this.clearForm();
+            this.$router.push("/clienthome");
           })
           .catch(error => {
             console.error(error);
