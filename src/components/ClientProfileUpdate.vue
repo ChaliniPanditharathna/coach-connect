@@ -100,6 +100,17 @@
         });
         },
     },
+    mounted() {
+    const userId = localStorage.getItem("userid");
+    ProfileService.getClientDetails(userId)
+      .then(response => {
+        const clientDetails = response.data;
+        this.profileUpdateRequest = { ...this.profileUpdateRequest, ...clientDetails };
+      })
+      .catch(error => {
+        console.error("Error fetching client details:", error);
+      });
+  },
   };
   </script>
   
