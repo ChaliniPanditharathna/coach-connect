@@ -48,37 +48,61 @@
         />
       </div>
       <div class="form-group">
-        <label for="description">Description</label>
+        <label for="qualification">Qulifiication</label>
         <textarea
-          id="description"
-          v-model="description"
+          id="qualification"
+          v-model="qualification"
+          class="form-control"
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label for="expertise">Expertise</label>
+        <textarea
+          id="expertise"
+          v-model="expertise"
           class="form-control"
         ></textarea>
       </div>
       <!-- New instructor availability fields -->
       <div class="availability-section">
-  <!-- New instructor availability fields -->
-  <div v-for="(availability, index) in instructorAvailabilities" :key="index">
-    <div class="availability-group">
-      <h5 class="availability-heading">Availability {{ index + 1 }}</h5>
-      <div class="form-group">
-        <label for="weekDay">Week Day</label>
-        <input type="text" v-model="availability.weekDay" class="form-control" />
+        <!-- New instructor availability fields -->
+        <div
+          v-for="(availability, index) in instructorAvailabilities"
+          :key="index"
+        >
+          <div class="availability-group">
+            <h5 class="availability-heading">Availability {{ index + 1 }}</h5>
+            <div class="form-group">
+              <label for="weekDay">Week Day</label>
+              <input
+                type="text"
+                v-model="availability.weekDay"
+                class="form-control"
+              />
+            </div>
+            <div class="form-group">
+              <label for="startTime">Start Time</label>
+              <input
+                type="time"
+                v-model="availability.startTime"
+                class="form-control"
+              />
+            </div>
+            <div class="form-group">
+              <label for="endTime">End Time</label>
+              <input
+                type="time"
+                v-model="availability.endTime"
+                class="form-control"
+              />
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="startTime">Start Time</label>
-        <input type="time" v-model="availability.startTime" class="form-control" />
-      </div>
-      <div class="form-group">
-        <label for="endTime">End Time</label>
-        <input type="time" v-model="availability.endTime" class="form-control" />
-      </div>
-    </div>
-  </div>
-</div>
 
-      <button type="button" @click="addAvailability" class="btn btn-secondary">Add Availability</button>
-
+      <button type="button" @click="addAvailability" class="btn btn-secondary">
+        Add Availability
+      </button>
 
       <button type="submit" class="btn btn-primary">Update Profile</button>
     </form>
@@ -94,58 +118,122 @@
 
 <script>
 import ProfileService from "../services/ProfileService";
-
 export default {
   name: "InstructorProfileUpdate",
   data() {
     return {
       successMessage: "",
       errorMessage: "",
-      instructorAvailabilities: [{ weekDay: "", startTime: "", endTime: "" }]
+      instructorAvailabilities: [],
     };
   },
-  create(){
-  localStorage.setItem("isLoggedIn", true);
-},
+  created() {
+    // Corrected "create" to "created"
+    const id = localStorage.getItem("userid");
+    ProfileService.getInstructorDetails(id) // Assuming this is a function to fetch profile details
+      .then((response) => {
+        if (response && response.data) {
+          const profile = response.data;
+          this.fName = profile.fName;
+          this.lName = profile.lName;
+          this.gender = profile.gender;
+          this.unitNo = profile.unitNo;
+          this.street = profile.street;
+          this.city = profile.city;
+          this.birthDate = profile.birthDate;
+          this.postalCode = profile.postalCode;
+          this.expertise = profile.expertise;
+          this.qualification = profile.qualification;
+          this.instructorAvailabilities = profile.availability;
+        } else {
+          this.addAvailability();
+        }
+      })
+      .catch((error) => {
+        console.error("hete", error);
+      });
+  },
   methods: {
     addAvailability() {
-      this.instructorAvailabilities.push({ weekDay: "", startTime: "", endTime: "" });
+      this.instructorAvailabilities.push({
+        weekDay: "",
+        startTime: "",
+        endTime: "",
+      });
     },
-
-  
     updateProfile() {
-      this.instructorAvailabilities.forEach((availability) => {
-    availability.startTime += ":00";
-    availability.endTime += ":00";
-  });
-      const profileUpdateRequest = {
-        fName: this.fName,
-        lName: this.lName,
-        email : localStorage.getItem("email"),
-        gender: this.gender,
-        unitNo: this.unitNo,
-        street: this.street,
-        city: this.city,
-        birthDate: this.birthDate,
-        postalCode: this.postalCode,
-        description: this.description,
-        instructorAvailability: this.instructorAvailabilities,
-      };
-      const id = localStorage.getItem("userid");
-      console.log("Print log33", profileUpdateRequest);
-      ProfileService.updateProfileDetails(id, profileUpdateRequest)
+      if (this.fName !== null) {
+        this.instructorAvailabilities.forEach((availability) => {
+          availability.startTime += ":00";
+          availability.endTime += ":00";
+        });
+      }
+      const userId = localStorage.getItem("userid");
+      ProfileService.getInstructorDetails(userId) // Assuming this is a function to fetch profile details
         .then((response) => {
-          console.log(response.data);
-          this.successMessage = "Updated Successfully";
-          alert("Sucessfully update the records");
-          this.clearForm();
-          this.$router.push("/instructorhome");
+          if (response && response.data) {
+            const profileUpdateRequest2 = {
+              fName: this.fName,
+              lName: this.lName,
+              email: localStorage.getItem("email"),
+              gender: this.gender,
+              unitNo: this.unitNo,
+              street: this.street,
+              city: this.city,
+              birthDate: this.birthDate,
+              postalCode: this.postalCode,
+              expertise: this.expertise,
+              qualification: this.qualification,
+              instructorAvailability: [],
+            };
+            console.log("sjsjsjjs", profileUpdateRequest2);
+            ProfileService.updateProfileDetails(userId, profileUpdateRequest2)
+              .then((response) => {
+                console.log(response.data);
+                this.successMessage = "Updated Successfully";
+                alert("Sucessfully update the records");
+                this.clearForm();
+                this.$router.push("/instructorhome");
+              })
+              .catch((error) => {
+                console.error(error);
+                this.successMessage = "";
+                this.errorMessage = "Update Failed";
+              });
+          } else {
+            const profileUpdateRequest1 = {
+              fName: this.fName,
+              lName: this.lName,
+              email: localStorage.getItem("email"),
+              gender: this.gender,
+              unitNo: this.unitNo,
+              street: this.street,
+              city: this.city,
+              birthDate: this.birthDate,
+              postalCode: this.postalCode,
+              expertise: this.expertise,
+              qualification: this.qualification,
+              instructorAvailability: this.instructorAvailabilities,
+            };
+            ProfileService.updateProfileDetails(userId, profileUpdateRequest1)
+              .then((response) => {
+                console.log(response.data);
+                this.successMessage = "Updated Successfully";
+                alert("Sucessfully update the records");
+                this.clearForm();
+                this.$router.push("/instructorhome");
+              })
+              .catch((error) => {
+                console.error(error);
+                this.successMessage = "";
+                this.errorMessage = "Update Failed";
+              });
+          }
         })
         .catch((error) => {
-          console.error(error);
-          this.successMessage = "";
-          this.errorMessage = "Update Failed";
+          console.error( error);
         });
+
     },
     clearForm() {
       this.fName = "";
@@ -156,7 +244,8 @@ export default {
       this.city = "";
       this.birthDate = ""; // Assuming birthDate is a part of the form
       this.postalCode = "";
-      this.description = "";
+      this.qualification = "";
+      this.expertise = "";
       this.weekDay = "";
       this.startTime = "";
       this.endTime = "";
@@ -164,8 +253,6 @@ export default {
   },
 };
 </script>
-
-
 
 <style scoped>
 /* Styles for the form container */
@@ -202,7 +289,7 @@ h4 {
 .form-group select,
 .form-group textarea {
   flex: 2;
-  padding: 6px; 
+  padding: 6px;
 }
 
 .form-group textarea {
@@ -239,6 +326,4 @@ h4 {
   background-color: #f8d7da;
   color: #721c24;
 }
-
-
 </style>

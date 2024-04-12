@@ -149,6 +149,7 @@
   .form-group select,
   .form-group textarea {
     flex: 2;
+    padding: 6px;
   }
   /* Styles for availability section */
   .availability-section {
