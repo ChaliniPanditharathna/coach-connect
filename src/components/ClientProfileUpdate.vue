@@ -104,45 +104,72 @@
   </script>
   
   <style scoped>
+  /* Styles for the form container */
   .update-profile-container {
-    max-width: 500px;
-    margin: auto;
+    max-width: 700px;
+    margin: 50px auto;
     padding: 20px;
     border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #f7f7f7;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
-  .update-profile-form {
-    margin-top: 20px;
-  }
-  
-  .form-group {
+  /* Styles for form headings */
+  h4 {
     margin-bottom: 20px;
   }
   
-  .label {
-    display: block;
-    margin-bottom: 5px;
+  /* Styles for form fields */
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   
-  .form-control {
-    width: 100%;
+  .form-group label {
+    flex: 1;
+    margin-right: 10px; /* Adjust margin as needed */
+    text-align: left; /* Align label text to the left */
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    flex: 2;
+  }
+  /* Styles for availability section */
+  .availability-section {
+    border-top: 1px solid #ccc; /* Add a border at the top */
+    padding-top: 20px; /* Add some padding at the top */
+  }
+  
+  /* Styles for availability group */
+  .availability-group {
+    margin-bottom: 20px;
+  }
+  
+  /* Styles for availability heading */
+  .availability-heading {
+    margin-bottom: 10px;
+  }
+  
+  /* Styles for success message */
+  .success-message,
+  .error-message {
+    margin-top: 20px;
     padding: 10px;
-    border: 1px solid #ccc;
     border-radius: 5px;
   }
-  
-  .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: #fff;
+  .success-message {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  .error-message {
+    background-color: #f8d7da;
+    color: #721c24;
   }
   
-  .btn-primary:hover {
-    background-color: #0056b3;
-  }
+  
   </style>
